@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/styl.css" />
+    <link rel="stylesheet" href="../css/plan.css" />
+    <style>
+        #yunyingkanban tr td {
+            position: relative;
+        }
+
+        #yunyingkanban img {
+            position: absolute;
+            right: 15px;
+            width: 11px;
+            top: 16px;
+        }
+
+        #yunyingkanban .wenhao {
+            width: 15px
+        }
+
+        .showInfo {
+            width: 100%;
+            min-height: 40px;
+            line-height: 40px;
+            padding-left: 20px;
+        }
+
+        #hexinyujing {
+            border: 1px solid #d6d6d6
+        }
+
+        #hexinyujing span {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            padding-left: 0px;
+        }
+
+        #hexinyujing span.red {
+            background-image: url(../img/redBomb.png);
+        }
+
+        #hexinyujing span.black {
+            background-image: url(../img/blackBomb.png);
+        }
+
+        #hexinyujing span.orange {
+            background-image: url(../img/orangeBomb.png)
+        }
+
+        #hexinyujing span.gray {
+            background-image: url(../img/fackBomb.png)
+        }
+
+        #hexinyujing tr td {
+            border: 0;
+            text-align: left;
+        }
+
+        #hexinyujing tr td:nth-child(1) {
+            padding-left: 8px;
+            box-sizing: border-box;
+        }
+
+        #hexinyujing tr:first-of-type {
+            background-color: #fff;
+        }
+
+        button {
+            padding: 5px 15px;
+            border-radius: 5px;
+            margin-left: 15px
+        }
+
+        button.red {
+            background-color: #f7ebf7;
+            color: #fff
+        }
+
+        a.black {
+            float: right;
+            margin-right: 10px;
+            padding: 5px 15px;
+            border-radius: 5px;
+            background-color: #000;
+            color: #fff
+        }
+
+        button.gray {
+            background-color: #cecece;
+            color: #585a52;
+        
+    </style>
+    <title>聚财鼠</title>
+    <script src="../js/api.js"></script>
+    <script src="../js/jquery-3.0.0.min.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <script src="../module/operationAI.js"></script>
+    <script src="../module/customer.js"></script>
+</head>
+
+<body style="position:relative;">
+    <div id="operaAI">
+        <v-custom-top :top="topCurrent"></v-custom-top>
+    </div>
+    <div class="navigation">
+        <a href="#">店铺预警</a>
+    </div>
+    <div class="main-box">
+        <!-- 左侧菜单 -->
+        <div id="leftMenu_Box">
+            <v-left-menu :current= current></v-left-menu>
+        </div>
+        <div class="r12-10r">
+            <!--测试按钮-->
+            <div id="operate-test_btn">
+                <v-operate-test-btn></v-operate-test-btn>
+            </div>
+            <!-- 运营看板 -->
+            <div id="operate-top">
+                <div class="b1">
+                    <h2 class="module_title">运营看板</h2>
+                </div>
+
+
+                <table id='yunyingkanban' v-show='onOff'>
+                    <tbody>
+                        <tr style='background-color: #f2f2f2' class="tr1">
+                            <td>跟踪项目</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td rowspan="2" style="background-color: #ffdddf">跟踪项目</td>
+                        </tr>
+                        <tr class="tr2">
+                            <td>数值(环比)</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr style='background-color: #f2f2f2' class="tr3">
+                            <td>跟踪项目</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td rowspan="2" style="background-color: #fde9d3">访客特征</td>
+                        </tr>
+                        <tr class="tr4">
+                            <td>数值(环比)</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr style='background-color: #f2f2f2' class="tr5">
+                            <td>跟踪项目</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td rowspan="2" style="background-color: #edf5dd">下单项目</td>
+                        </tr>
+                        <tr class="tr6">
+                            <td>数值(环比)</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr style='background-color: #f2f2f2' class="tr7">
+                            <td>跟踪项目</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td rowspan="2" style="background-color: #e5f5fd">支付项目</td>
+                        </tr>
+                        <tr class="tr8">
+                            <td>数值(环比)</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr style='background-color: #f2f2f2' class="tr9">
+                            <td>跟踪项目</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td rowspan="2" style="background-color: #f7ebf7">完结项目</td>
+                        </tr>
+                        <tr class="tr10">
+                            <td>数值(环比)</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="showInfo"></div>
+                <img class="noData_img" src='../img/loading.png' v-show='!onOff'>
+            </div>
+            <!--  <table class="operationAI_tab_1"> 
+    <tbody id='tbody_load_list'>
+   
+    
+   </tbody>
+      -->
+
+            <!-- 核心预警 -->
+            <div id="main-warning">
+                <div class="b1">
+                    <h2 class="module_title">核心预警</h2>
+                </div>
+				<v-main-warning-table :table-data="tableData" :no-data="noData"></v-main-warning-table>
+              
+            </div>
+            <div id="adjust">
+                <v-adjust-form></v-adjust-form>
+            </div>
+            <!-- 调整日志 -->
+            <!--    <div id="adjust-info">
+                <div class="b1">
+                    <h2 class="module_title">调整日志</h2>
+                </div>
+                <v-adjust-info :table-data="tableData" :pageno="pageno"></v-adjust-info>
+                <v-page :count="count" :allpage="allpage" :pageno="pageno" @pn="changepn"></v-page>
+            </div> -->
+            <!-- 转化地图 -->
+            <div id="transform_map">
+                <div class="b1">
+                    <h2 class="module_title">产品转化地图</h2>
+                </div>
+                <v-transform-map :all-data="allData" v-show="mapShow"></v-transform-map>
+                <img class="noData_img" src="../img/loading.png" v-show="!mapShow" />
+            </div>
+        </div>
+    </div>
+    <script>
+        
+    </script>
+    <script>
+   $(function () {
+			 var sellerid = sessionStorage.getItem('sellerId');
+			 var shopname = sessionStorage.getItem('shopname');
+			 var enddate = sessionStorage.getItem('enddate');
+			 var operaAI = new Vue({
+				el: "#operaAI",
+				data: {
+					topCurrent: 1
+					}
+				})
+				var operaAIT = new Vue({
+					el: "#adjust",
+				   
+				})
+					var mainWarning = new Vue({
+					el: "#main-warning",
+					 data: function () {
+							return {
+							   noData: false,
+								tableis: true,
+								loadis: false,
+								url: $api.SPTarget,
+								 sellerid: '',
+								auctionid: '',
+								id: '',
+								tableData: [],
+								orignData: [],
+								dataArr: [],
+								pageIndex: '',
+								ttype: ''
+							}
+						  },
+						created() {
+							var $this = this;							
+							
+						//获取店铺ID
+							   $.ajax({
+									url: "http://localhost:30005/searchmouse-admin/shopWarn/querySeller",
+									type: "GET",
+									data:{
+										shopname:shopname
+									},
+									dataType: "json",
+									async: false,
+									success: function(data) {  
+											//console.log(data);
+											//id = data.data[0].sellerId;
+											sessionStorage.setItem("sellerId", data.data[0].sellerId);
+											 //请求接口
+												
+												$.ajax({
+													url: $this.url,
+													type: "POST",
+													data: {
+														name: 'sp_show_shop_thunder',
+														params: data.data[0].sellerId
+													},
+													dataType: "json",
+													async: false,
+													success: function(data) {
+														console.log(data);
+														if (data.data.length == 0 ||data.data == null) {
+															setTimeout(function() {
+																$this.noData = false;
+																return;
+															}, 10);
+														}else{
+															$this.tableData = data.data
+															//console.log($this.tableData)
+															$this.noData = true;
+														}
+															
+														
+													}
+												 });
+											   
+									},
+									error: function(xhr) {
+										console.log(xhr);
+									}
+								}) 
+						   
+							
+							
+						}
+				   
+				})
+			//console.log(shopname,enddate,sellerid);
+			dat(shopname,enddate);
+			$.ajax({
+				url: "http://mouse.molesoft.cn/api.aspx?invokeName=GetShopInfomation",
+				type: "POST",
+				dataType: "json",
+				contentType: "application/json",
+				success: function(data) {
+					console.log(data)
+					 if (data == false) {
+						 window.location.href = "http://mouse.molesoft.cn/SearchExperts/Hint.aspx";
+					 } else {
+						shopname = data.shopname;
+						sessionStorage.setItem("shopname", data.shopname);
+						sessionStorage.setItem("enddate", data.enddate);
+					
+					dat(data.shopname,data.enddate);
+					}
+					//获取店铺ID
+				   $.ajax({
+						url: "http://localhost:30005/searchmouse-admin/shopWarn/querySeller",
+						type: "GET",
+						data:{
+							shopname:data.shopname
+						},
+						dataType: "json",
+						async: false,
+						success: function(data) {  
+								//console.log(data);
+								sellerid = data.data[0].sellerId;
+								sessionStorage.setItem("sellerId", data.data[0].sellerId);
+								
+								   
+						},
+						error: function(xhr) {
+							console.log(xhr);
+						}
+					}) 
+				  }
+				
+				 
+			});
+		   	//获取店铺ID
+				   $.ajax({
+						url: "http://localhost:30005/searchmouse-admin/shopWarn/querySeller",
+						type: "GET",
+						data:{
+							shopname:sessionStorage.getItem('shopname')
+						},
+						dataType: "json",
+						async: false,
+						success: function(data) {  
+								//console.log(data);
+								sellerid = data.data[0].sellerId;
+								sessionStorage.setItem("sellerId", data.data[0].sellerId);
+								
+								   
+						},
+						error: function(xhr) {
+							console.log(xhr);
+						}
+					});
+					var transform = new Vue({
+						el: "#transform_map",
+						
+						data: {
+							
+							url: $api.SPTarget,
+							allData: [{
+								type: "PV",
+								title: "路径层",
+								arr: []
+							}, {
+								type: "下单子订单数",
+								title: "下单层",
+								arr: []
+							}, {
+								type: "支付子订单数",
+								title: "支付层",
+								arr: []
+							}], //处理后的数据结构
+							mapShow: true, //显示无数据图片
+						},
+						created() {
+							var $this = this;
+							
+
+
+							// var $this = this;
+							// $this.sellerid = 195051840; //原来的
+							// // $this.sellerid = 1062340001; //无数据
+						//获取店铺ID
+							   $.ajax({
+									url: "http://localhost:30005/searchmouse-admin/shopWarn/querySeller",
+									type: "GET",
+									data:{
+										shopname:shopname
+									},
+									dataType: "json",
+									async: false,
+									success: function(data) {  
+											//console.log(data);
+											//id = data.data[0].sellerId;
+											sessionStorage.setItem("sellerId", data.data[0].sellerId);
+											 //请求接口
+												
+												$.ajax({
+													url: $this.url,
+													type: "POST",
+													data: {
+														name: "SP_Auction_Translation",
+														params: data.data[0].sellerId
+													   
+													},
+													dataType: "json",
+													async: false,
+													success: function(data) {
+														 console.log(data); //将数据处理成三大块
+														 var data = data.data;
+														if (data.length != 0) {
+															for (var i = 0; i < data.length; i++) {
+																for (var j = 0; j < $this.allData.length; j++) {
+																	if (data[i].level == $this.allData[j].type) {
+																		$this.allData[j].arr.push(data[i]);
+																	}
+																}
+															}
+														} else {
+															$this.mapShow = false;
+														}
+														console.log($this.allData);
+													},
+													error: function(xhr) {
+														console.log(xhr);
+													}
+												});
+											   
+									},
+									error: function(xhr) {
+										console.log(xhr);
+									}
+								}) 
+						   
+							
+							
+						}
+					}); 
+			//添加用户数据
+					function dat(shopname,enddate) {
+						$(".user-a").html('');
+						var datStr =
+							'<span>' + shopname + '</span>' +
+							'<div class="help-box">' +
+							'<div class="help-date" data-start="2013-04-24">' +
+							'<div><span>' + enddate + '</span> 到期 </div><a href="https://fuwu.taobao.com/ser/detail.html?service_code=ts-18350" target="_blank">续费升级</a></div>' +
+							'<div class="help-num">021-65400080</div>' +
+							'<div class="help-more">' +
+							'<a class="help-contact" target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&amp;touid=%E4%B8%8A%E6%B5%B7%E6%99%8F%E9%BC%A0%3A%E8%8A%92%E6%9E%9C&amp;siteid=cntaobao&amp;status=1&amp;charset=utf-8">技术支持</a>' +
+							'<a class="help-explain" href="Help.aspx">使用说明</a>' +
+							'</div>' +
+							'</div>';
+						$(".user-a").html(datStr);
+					}
+            $('#yunyingkanban').on("click", '.wenhao', function () {
+                if ($('.showInfo').html() == '') {
+                    var html = $(this).next().html();
+                    console.log(html)
+                    $(this).attr('src', '../img/wenhao1.png')
+                    $('.showInfo').html(html)
+                } else if ($('.showInfo').html() != '' && $(this).attr('src') == '../img/wenhao.png') {
+                    $('#yunyingkanban tbody tr:even  img').attr('src', '../img/wenhao.png')
+                    $(this).attr('src', '../img/wenhao1.png');
+                    var html = $(this).next().html();
+                    $('.showInfo').html(html)
+                } else {
+                    $('.showInfo').html('')
+                    $(this).attr('src', '../img/wenhao.png')
+                }
+            })
+			
+			
+			
+			
+		addData(sellerid);
+		//addData2(sellerid)
+        })
+        var the_title = new Array("<b>访客数：</b>你的店铺页面或产品详情页被访问的人数，排除重复人数，一个人在一个自然天内访问多次记为一次。",
+            "<b>新访客数：</b>一个自然天内，访问您店铺中的新访客数。本次访问前6天内曾经来访过店铺，记做老访客，否则为新访客。",
+            "<b>回头客数：</b>浏览回头客人数",
+            "<b>新访客占比：</b>统计时间内，新访客数占总访客数的百分比",
+            "<b>无线访客占比：</b>一个自然天内，店铺的无线端访客数占比（即：自然天无线端访客数/（自然天PC端访客数+自然天无线端访客数））。",
+            "<b>一次留存率：</b>来访店铺浏览量大于1的访客数占总访客数的百分比。",
+            "<b>详情页到达率：</b>商品详情页的访客数与店铺总访客数的比值。",
+            "<b>平均访问深度：</b>访问深度为用户在一次访问内访问店铺内页面的次数，平均访问深度即所有用户每次访问时访问深度的平均值。跨天查看时，该指标是一个自然天内的平均值。",
+            "<b>详情页收藏率：</b>所有商品页被收藏的次数占店铺总访客数的比值。另据我们统计发现店铺首页收藏次数占总收藏次数的比例很小（超半数的情况店铺首页收藏次数与总收藏次数占比都不到百分之十），所以不另做店铺首页收藏的统计。",
+            "<b>详情页加购率：</b>将商品添加至购物车的用户数占店铺总访客数的比值。",
+            "<b>店铺拍下笔数：</b>店铺中宝贝被拍下的总次数（一次拍下多件宝贝，算拍下一笔）。",
+            "<b>店铺拍下金额：</b>店铺中宝贝被拍下的总金额。",
+            "<b>店铺下单率：</b>一个自然天内，店铺拍下笔数与店铺访客数的比值。",
+            "<b>下单客单件：</b>店铺商品被拍下的总件数与拍下笔数的比值。",
+            "<b>下单客单价：</b>店铺商品被拍下的总金额与拍下笔数的比值。",
+            "<b>店铺成交金额：</b>一个自然天内，进入店铺的用户，拍下且通过支付宝交易的成交金额总和（含运费）。<br/>店铺成交金额=直接成交金额+间接成交金额。",
+            "<b>下单支付率：</b>完成支付宝支付的总金额占拍下总金额的比值。",
+            "<b>订单支付率：</b>支付订单数占下单订单数的百分比，支付率=支付订单数/下单订单数",
+            "<b>支付客单件：</b>店铺商品支付总件数/店铺支付人数",
+            "<b>支付客单价：</b>支付宝成交金额/店铺支付人数。单日“客单价”指单日每成交用户产生的成交金额。",
+            "<b>已收款金额：</b>一个自然天内，显示已收货的商品总金额。",
+            "<b>交易成功笔数：</b>一个自然天内，完成交易的总笔数。",
+            "<b>已收货商品数：</b>一个自然天内，显示已收货的商品数量。",
+            "<b>退款成功金额：</b>一个自然天内完成退款申请流程的退款总金额。",
+            "<b>七天订单完结率：</b>七天内交易成功的笔数占支付买家数的百分比。")
+        var theData = [{
+            target: '访客数',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>访客数：</b>你的店铺页面或产品详情页被访问的人数，排除重复人数，一个人在一个自然天内访问多次记为一次。'
+        }, {
+            target: '新访客数',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>新访客数：</b>一个自然天内，访问您店铺中的新访客数。本次访问前6天内曾经来访过店铺，记做老访客，否则为新访客。'
+        }, {
+            target: '回头客数',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>回头客数：</b>浏览回头客人数'
+        }, {
+            target: '新访客占比',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>新访客占比：</b>统计时间内，新访客数占总访客数的百分比。'
+        }, {
+            target: '无线访客占比',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>无线访客占比：</b>一个自然天内，店铺的无线端访客数占比（即：自然天无线端访客数/（自然天PC端访客数+自然天无线端访客数））。'
+        }, {
+            target: '一次留存率',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>一次留存率：</b>来访店铺浏览量大于1的访客数占总访客数的百分比。'
+        }, {
+            target: '页面到达率',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>详情页到达率：</b>商品详情页的访客数与店铺总访客数的比值。'
+        }, {
+            target: '平均访问深度',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>平均访问深度：</b>访问深度为用户在一次访问内访问店铺内页面的次数，平均访问深度即所有用户每次访问时访问深度的平均值。跨天查看时，该指标是一个自然天内的平均值。'
+        }, {
+            target: '页面收藏率',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>详情页收藏率：</b>所有商品页被收藏的次数占店铺总访客数的比值。另据我们统计发现店铺首页收藏次数占总收藏次数的比例很小（超半数的情况店铺首页收藏次数与总收藏次数占比都不到百分之十），所以不另做店铺首页收藏的统计。'
+        }, {
+            target: '页面加购率',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>详情页加购率：</b>将商品添加至购物车的用户数占店铺总访客数的比值。'
+        }, {
+            target: '店铺拍下笔数',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>店铺拍下笔数：</b>店铺中宝贝被拍下的总次数（一次拍下多件宝贝，算拍下一笔）。'
+        }, {
+            target: '店铺拍下金额',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>店铺拍下金额：</b>店铺中宝贝被拍下的总金额。'
+        }, {
+            target: '店铺下单率',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>店铺下单率：</b>一个自然天内，店铺拍下笔数与店铺访客数的比值。'
+        }, {
+            target: '下单客单件',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>下单客单件：</b>店铺商品被拍下的总件数与拍下笔数的比值。'
+        }, {
+            target: '下单客单价',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>下单客单价：</b>店铺商品被拍下的总金额与拍下笔数的比值。'
+        }, {
+            target: '店铺成交金额',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>店铺成交金额：</b>一个自然天内，进入店铺的用户，拍下且通过支付宝交易的成交金额总和（含运费）。<br/>店铺成交金额=直接成交金额+间接成交金额。'
+        }, {
+            target: '下单支付率',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>下单支付率：</b>完成支付宝支付的总金额占拍下总金额的比值。'
+        }, {
+            target: '订单支付率',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>订单支付率：</b>支付订单数占下单订单数的百分比，支付率=支付订单数/下单订单数。'
+        }, {
+            target: '支付客单件',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>支付客单件：</b>店铺商品支付总件数/店铺支付人数'
+        }, {
+            target: '支付客单价',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>支付客单价：</b>支付宝成交金额/店铺支付人数。单日“客单价”指单日每成交用户产生的成交金额。'
+        }, {
+            target: '已收款金额',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>已收款金额：</b>一个自然天内，显示已收货的商品总金额。'
+        }, {
+            target: '交易成功笔数',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>交易成功笔数：</b>一个自然天内，完成交易的总笔数。'
+        }, {
+            target: '已收货商品数',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>已收货商品数：</b>一个自然天内，显示已收货的商品数量。'
+        }, {
+            target: '退款成功金额',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>退款成功金额：</b>一个自然天内完成退款申请流程的退款总金额。'
+        }, {
+            target: '七天订单完结率',
+            rank: '',
+            value: '',
+            isActive: false,
+            title: '<b>七天订单完结率：</b>七天内交易成功的笔数占支付买家数的百分比。'
+        }]
+
+        var selleridSave;
+        //渲染运营看板
+        /*$.ajax({
+            url: "http://localhost:8080/searchmouse-admin/shopWarn/queryShopName",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                var theShopName = data.shopname;
+                $.ajax({
+                    url: $api.	er,
+                    data: {
+                        shopname: theShopName
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data1) {
+                        var sellerid = data1.data[0].sellerId
+                        
+                    }
+                })
+
+            }
+        })*/
+		
+		
+		addData = function(id){
+		
+			$.ajax({
+                            url: "http://localhost:30005/searchmouse-admin/shopWarn/SP_OutPutTarget",
+                            data: {
+                                sellerid: id
+                            },
+                            success: function (theTableData) {
+                                //循环得到名字
+								console.log(theTableData)
+                                var indexTr = 1
+                                //循环添加得到数据
+                                for (key in theTableData.data.operatingKanbanNew) {
+                                    //array为每行数据 这里循环5次
+
+                                    var array = theTableData.data.operatingKanbanNew[
+                                        key].split(',');
+                                    //会循环5次 value为第二行的值
+                                    array.forEach(function (value, index) {
+                                        $('#yunyingkanban tr').eq(indexTr).find(
+                                            'td').eq(index + 1).text(
+                                                value)
+                                    })
+                                    indexTr += 2;
+                                }
+                                //添加名称和加图片标签
+                                for (var i = 0; i < theData.length; i++) {
+                                    if (i < 5) {
+                                        $('.tr1 td').eq(i + 1).text(theData[i].target);
+                                        $('.tr1 td').eq(i + 1).append(
+                                            "<img class='wenhao' src='../img/wenhao.png'><div style='display:none'>" +
+                                            the_title[i] + "</div>");
+                                        $('.tr2 td').eq(i + 1).append("<img>");
+                                    } else if (i < 10) {
+                                        $('.tr3 td').eq(i - 5 + 1).text(theData[i].target)
+                                        $('.tr3 td').eq(i - 5 + 1).append(
+                                            "<img class='wenhao' src='../img/wenhao.png'><div style='display:none'>" +
+                                            the_title[i] + "</div>");
+                                        $('.tr4 td').eq(i - 5 + 1).append("<img>");
+
+                                    } else if (i < 15) {
+                                        $('.tr5 td').eq(i - 10 + 1).text(theData[i]
+                                            .target)
+                                        $('.tr5 td').eq(i - 10 + 1).append(
+                                            "<img class='wenhao' src='../img/wenhao.png'><div style='display:none'>" +
+                                            the_title[i] + "</div>");
+                                        $('.tr6 td').eq(i - 10 + 1).append("<img>");
+
+                                    } else if (i < 20) {
+                                        $('.tr7 td').eq(i - 15 + 1).text(theData[i]
+                                            .target)
+                                        $('.tr7 td').eq(i - 15 + 1).append(
+                                            "<img class='wenhao' src='../img/wenhao.png'><div style='display:none'>" +
+                                            the_title[i] + "</div>");
+                                        $('.tr8 td').eq(i - 15 + 1).append("<img>");
+                                    } else if (i < 25) {
+                                        $('.tr9 td').eq(i - 20 + 1).text(theData[i]
+                                            .target)
+                                        $('.tr9 td').eq(i - 20 + 1).append(
+                                            "<img class='wenhao' src='../img/wenhao.png'><div style='display:none'>" +
+                                            the_title[i] + "</div>");
+                                        $('.tr10 td').eq(i - 20 + 1).append("<img>");
+                                    }
+                                }
+
+                                var indexTr2 = 1
+                                //循环添加图片
+                                for (key in theTableData.data.operatingKanbanNewArrow) {
+                                    //array为每行数据 这里循环5次
+
+                                    var array = theTableData.data.operatingKanbanNewArrow[
+                                        key].split(',');
+                                    //会循环5次 value为第二行的值
+                                    array.forEach(function (value, index) {
+                                        if (value == '0') {
+                                            $('#yunyingkanban tr').eq(
+                                                indexTr2).find('td').eq(
+                                                    index + 1).find('img').attr(
+                                                        'src',
+                                                        '../img/line.png')
+                                        } else if (value == '1') {
+                                            $('#yunyingkanban tr').eq(
+                                                indexTr2).find('td').eq(
+                                                    index + 1).find('img').attr(
+                                                        'src', '../img/up.png')
+                                        } else if (value == '2') {
+                                            $('#yunyingkanban tr').eq(
+                                                indexTr2).find('td').eq(
+                                                    index + 1).find('img').attr(
+                                                        'src',
+                                                        '../img/down.png')
+                                        }
+                                    })
+                                    indexTr2 += 2;
+                                }
+                            }
+                        });
+		}
+
+        addData2 = function(id){
+			//渲染核心预警
+                        $.ajax({
+						
+                            url: "http://localhost:30005/searchmouse-admin/spmag/callSp", //路径  
+                            data: {
+                                name: "sp_show_shop_thunder",
+                                params: id
+                            },
+                            success: function (result) {
+                                //value为每一行数据 index为0 - 9
+                                console.log(result)	
+								if(result.data == null || result.data.length == 0){
+									$('#hexinyujing').css('display','none')
+									$('.imgShow').css('display','block')
+								};
+                                result.data.forEach(function (value, index) {
+                                    $('#hexinyujing tbody tr').eq(index).find(
+                                        'td').eq(1).append('核心指标: ' +
+                                            value.point);
+                                    $('#hexinyujing tbody tr').eq(index).find(
+                                        'td').eq(2).append('昨日值: ' +
+                                            value.yesterday_value);
+                                    $('#hexinyujing tbody tr').eq(index).find(
+                                        'td').eq(3).append('前日值: ' +
+                                            value.day_before_yesterday_value
+                                        );
+									 $('#hexinyujing tbody tr').eq(index).find(
+                                        'td').eq(4).attr('value',value.point)
+
+                                    for (var i = 0; i < 10; i++) {
+                                        $('#hexinyujing tbody tr').eq(index)
+                                            .find('td').eq(0).append(
+                                                '<span></span>');
+
+                                    }
+                                    var num = value.count;;
+
+                                    for (var i = 0; i < 10; i++) {
+                                        if (value.color == '4') {
+                                            $('#hexinyujing tbody tr').eq(
+                                                index).find('td').eq(0)
+                                                .find('span:lt(' + num +
+                                                    ')').addClass('black');
+                                            $('#hexinyujing tbody tr').eq(
+                                                index).find('td').eq(0)
+                                                .find('span').eq(num).addClass(
+                                                    'red');
+                                            $('#hexinyujing tbody tr').eq(
+                                                index).find('td').eq(0)
+                                                .find('span:gt(' + num +
+                                                    ')').addClass('red');
+                                        } else if (value.color == '3') {
+                                            $('#hexinyujing tbody tr').eq(
+                                                index).find('td').eq(0)
+                                                .find('span:lt(' + num +
+                                                    ')').addClass('red');
+                                            $('#hexinyujing tbody tr').eq(
+                                                index).find('td').eq(0)
+                                                .find('span').eq(num).addClass(
+                                                    'orange');
+                                            $('#hexinyujing tbody tr').eq(
+                                                index).find('td').eq(0)
+                                                .find('span:gt(' + num +
+                                                    ')').addClass('orange');
+                                        } else if (value.color == '2') {
+                                            $('#hexinyujing tbody tr').eq(
+                                                index).find('td').eq(0)
+                                                .find('span:lt(' + num +
+                                                    ')').addClass('orange');
+                                            $('#hexinyujing tbody tr').eq(
+                                                index).find('td').eq(0)
+                                                .find('span').eq(num).addClass(
+                                                    'gray');
+                                            $('#hexinyujing tbody tr').eq(
+                                                index).find('td').eq(0)
+                                                .find('span:gt(' + num +
+                                                    ')').addClass('gray');
+                                        } else if (value.color == '1') {
+                                            $('#hexinyujing tbody tr').eq(
+                                                index).find('td').eq(0)
+                                                .find('span').addClass(
+                                                    'gray');
+                                        }
+                                    }
+
+
+                                })
+                            }
+                        });
+		};
+		
+						
+$(function(){
+		//产品转化地图模块  组件实例化
+
+	
+		<!-- var tdLis = $('#hexinyujing tr .black'); -->
+		<!-- for (let i = 0; i < tdLis.length; i++) { -->
+			
+			   <!-- (function(arg){ -->
+				<!-- tdLis[arg].onclick = function(){ -->
+					<!-- console.log($(this).parent().siblings()); -->
+					<!-- $("#slove_fixed_box").show(); -->
+					<!-- $(".fixed_box").show(); -->
+				<!-- }; -->
+   <!-- })(i)   -->
+			
+		<!-- } -->
+		
+		
+	
+	})
+    </script>
+	
+    <script src="../js/operationAI.pages.js"></script>
+	
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/styl.css">
+    <link rel="stylesheet" href="../css/plan.css">
+    <link href='../css/animate.css'>
+    <title>客群定位</title>
+    <script src='../js/api.js'></script>
+    <script src="../js/jquery-3.0.0.min.js"></script>
+    <script src="../js/echarts.min.js"></script>
+    <script src='../js/vue.min.js'></script>
+    <script src='../module/customer.js'></script>
+    <script src="../module/client-location.js"></script>
+    <script src="../module/operationAI.js"></script>
+    <script src="laydate1/laydate.js"></script>
+    <script src="../js/jquery.table2excel.js"></script>
+</head>
+
+<body>
+
+    <div id="clientCont">
+
+        <!-- 头部组件 -->
+        <v-custom-top :top="topCurrent"></v-custom-top>
+
+        <div class="navigation"><a href="#">客群定位</a></div>
+
+        <div class="main-box">
+
+            <!-- 左侧菜单 -->
+            <v-left-menu-customer :current="current"></v-left-menu-customer>
+
+            <!-- 头部日期 / 平台选择模块 -->
+            <v-client-nav></v-client-nav>
+
+            <!-- 核心内容模块 -->
+            <div class="r12-10r">
+
+                <!-- 主内容组件 -->
+                <!-- downLoad 宝贝购买明细页 下载 按钮隐藏-->
+                <!-- treaTabData 宝贝购买明细页表格数据  记住，不可跨组件传递-->
+                <v-client-cont :downLoad="downLoad" :trea-tab-data="treaTabData" :search="search"></v-client-cont>
+
+            </div>
+        </div>
+    </div>
+    <script src="../js/client-location.page.js"></script>
+</body>
+
+</html>

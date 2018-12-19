@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/styl.css">
+    <link rel="stylesheet" href="../css/plan.css">
+    <link href='../css/animate.css'>
+    <title>流量把控</title>
+    <script src='../js/api.js'></script>
+    <script src="../js/jquery-3.0.0.min.js"></script>
+    <script src='../js/vue.min.js'></script>
+    <script src='../module/leftmenu-flowanalyze.js'></script>
+
+</head>
+
+<body style="position:relative;">
+    <div class="top">
+        <div class="box">
+            <div class="top-a-box">
+                <a class="top-a" href="operationAI.html">店铺预警</a>
+            </div>
+            <div class="top-a-box top-a-box-sel">
+                <a class="top-a" href="flow-layout.html">流量把控</a>
+            </div>
+            <div class="top-a-box">
+                <a class="top-a" href="single_price.html">选品定价</a>
+            </div>
+            <div class="top-a-box">
+                <a class="top-a" href="client-location.html">客群定位</a>
+            </div>
+            <div class="user-a"></div>
+        </div>
+    </div>
+
+    <div class="navigation"><a href="#">流量把控</a></div>
+    <div class="main-box">
+        <!-- 左侧菜单 -->
+        <div id="leftMenu_Box">
+            <v-left-menu-flow></v-left-menu-flow>
+        </div>
+        <div class="r12-10r" id='iframe_web'>
+            <iframe src="http://mouse.molesoft.cn/SearchExperts/SearchReport.aspx" frameborder=0></iframe>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: "#leftMenu_Box",
+            created() {
+                var $this = this;
+                $.ajax({
+                    url: "http://mouse.molesoft.cn/api.aspx?invokeName=GetShopInfomation",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(data) {
+                        if (data == false) {
+                            window.location.href = "http://mouse.molesoft.cn/SearchExperts/Hint.aspx";
+                        } else {
+                            var $str = data.shopname;
+                            //添加用户数据
+                            function dat() {
+                                $(".user-a").html('');
+                                var datStr =
+                                    '<span>' + data.shopname + '</span>' +
+                                    '<div class="help-box">' +
+                                    '<div class="help-date" data-start="2013-04-24">' +
+                                    '<div><span>' + data.enddate + '</span> 到期 </div><a href="https://fuwu.taobao.com/ser/detail.html?service_code=ts-18350" target="_blank">续费升级</a></div>' +
+                                    '<div class="help-num">021-65400080</div>' +
+                                    '<div class="help-more">' +
+                                    '<a class="help-contact" target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&amp;touid=%E4%B8%8A%E6%B5%B7%E6%99%8F%E9%BC%A0%3A%E8%8A%92%E6%9E%9C&amp;siteid=cntaobao&amp;status=1&amp;charset=utf-8">技术支持</a>' +
+                                    '<a class="help-explain" href="Help.aspx">使用说明</a>' +
+                                    '</div>' +
+                                    '</div>';
+                                $(".user-a").html(datStr);
+                            }
+                            dat();
+                        }
+                    },
+                    error: function(xhr) {
+                        window.location.href = "http://mouse.molesoft.cn/SearchExperts/Hint.aspx";
+                    },
+                });
+            }
+        })
+    </script>
+
+</body>
+
+</html>

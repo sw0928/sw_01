@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/styl.css">
+    <link rel="stylesheet" href="../css/plan.css">
+    <link href='../css/animate.css'>
+    <title>客群定位</title>
+    <script src='../js/api.js'></script>
+    <script src="../js/jquery-3.0.0.min.js"></script>
+    <script src='../js/vue.min.js'></script>
+    <script src='../module/customer.js'></script>
+
+</head>
+
+<body style="position:relative;">
+
+    <div id="customer_cont">
+
+        <!-- 头部组件 -->
+        <v-custom-top :top="topCurrent"></v-custom-top>
+
+        <div class="navigation"><a href="#">客群定位</a></div>
+        <div class="main-box">
+
+            <!-- 左侧菜单 -->
+            <v-left-menu-customer :current="current"></v-left-menu-customer>
+
+            <div class="r12-10r">
+
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        //渲染全部
+        new Vue({
+            el: "#customer_cont",
+            data: {
+                topCurrent: 3, // 导航栏选中项
+                current: 0, //左侧菜单选中项
+            },
+            created() {
+                var $this = this;
+                $.ajax({
+                    url: "http://mouse.molesoft.cn/api.aspx?invokeName=GetShopInfomation",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(data) {
+                        if (data == false) {
+                            window.location.href = "http://mouse.molesoft.cn/SearchExperts/Hint.aspx";
+                        } else {
+                            var $str = data.shopname;
+                            //添加用户数据
+                            function dat() {
+                                $(".user-a").html('');
+                                var datStr =
+                                    '<span>' + data.shopname + '</span>' +
+                                    '<div class="help-box">' +
+                                    '<div class="help-date" data-start="2013-04-24">' +
+                                    '<div><span>' + data.enddate + '</span> 到期 </div><a href="https://fuwu.taobao.com/ser/detail.html?service_code=ts-18350" target="_blank">续费升级</a></div>' +
+                                    '<div class="help-num">021-65400080</div>' +
+                                    '<div class="help-more">' +
+                                    '<a class="help-contact" target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&amp;touid=%E4%B8%8A%E6%B5%B7%E6%99%8F%E9%BC%A0%3A%E8%8A%92%E6%9E%9C&amp;siteid=cntaobao&amp;status=1&amp;charset=utf-8">技术支持</a>' +
+                                    '<a class="help-explain" href="Help.aspx">使用说明</a>' +
+                                    '</div>' +
+                                    '</div>';
+                                $(".user-a").html(datStr);
+                            }
+                            dat();
+                        }
+                    },
+                    error: function(xhr) {
+                        window.location.href = "http://mouse.molesoft.cn/SearchExperts/Hint.aspx";
+                    },
+                });
+            }
+        })
+    </script>
+
+</body>
+
+</html>

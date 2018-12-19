@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/echarts.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/styl.css">
+    <link rel="stylesheet" href="../css/plan.css">
+    <link rel="stylesheet" href='../css/animate.css'>
+    <script src='../js/echarts.min.js'></script>
+    <script src='../js/api.js'></script>
+    <script src="../js/jquery-3.0.0.min.js"></script>
+    <script src='../js/vue.min.js'></script>
+    <script src='../module/customer.js'></script>
+    <script src="../module/no-control.js"></script>
+    <script src='../module/operationAI.js'></script>
+    <script src='../module/search_index.js'></script>
+    <title>流量把控</title>
+
+</head>
+
+<body>
+    <div id="main_search-index">
+
+        <!-- 头部组件 -->
+        <v-custom-top :top="topCurrent"></v-custom-top>
+
+        <div class="navigation">流量把控-<a href="#">可控流量</a></div>
+
+        <div class='main'>
+
+            <!-- 左侧菜单 -->
+            <v-flow-left :current="current"></v-flow-left>
+
+            <v-select-plat :sellerid='sellerid'></v-select-plat>
+
+            <div class="r12-10r">
+                <v-search-place :sellerid='sellerid'></v-search-place>
+
+                <v-search-index :sellerid='sellerid'></v-search-index>
+
+                <div class="module-title">
+                    <h1>核心关键词近30天数据</h1>
+                </div>
+
+                <v-keywords30 :sellerid='sellerid'></v-keywords30>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script type="text/javascript">
+        var bus = new Vue();
+        var vm = new Vue({
+            el: "#main_search-index",
+            data: {
+                sellerid: '', //店铺ID
+                topCurrent: 1, //头部组件选中项
+                current: 1, //左侧菜单选中项
+            },
+            created() {
+                // setTimeout(() => {
+                //     this.sellerid = 195051840;
+                // }, 100);
+
+                var $this = this;
+                $.ajax({
+                    url: "http://mouse.molesoft.cn/api.aspx?invokeName=GetShopInfomation",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(data) {
+                        if (data == false) {
+                            window.location.href =
+                                "http://mouse.molesoft.cn/SearchExperts/Hint.aspx";
+                        } else {
+                            var $str = data.shopname;
+                            //添加用户数据
+                            function dat() {
+                                $(".user-a").html('');
+                                var datStr =
+                                    '<span>' + data.shopname + '</span>' +
+                                    '<div class="help-box">' +
+                                    '<div class="help-date" data-start="2013-04-24">' +
+                                    '<div><span>' + data.enddate +
+                                    '</span> 到期 </div><a href="https://fuwu.taobao.com/ser/detail.html?service_code=ts-18350" target="_blank">续费升级</a></div>' +
+                                    '<div class="help-num">021-65400080</div>' +
+                                    '<div class="help-more">' +
+                                    '<a class="help-contact" target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&amp;touid=%E4%B8%8A%E6%B5%B7%E6%99%8F%E9%BC%A0%3A%E8%8A%92%E6%9E%9C&amp;siteid=cntaobao&amp;status=1&amp;charset=utf-8">技术支持</a>' +
+                                    '<a class="help-explain" href="Help.aspx">使用说明</a>' +
+                                    '</div>' +
+                                    '</div>';
+                                $(".user-a").html(datStr);
+                            }
+                            dat();
+
+                            //获取店铺ID
+                            $.ajax({
+                                url: $api.querySeller + data.shopname,
+                                type: "GET",
+                                dataType: "json",
+                                success: function(data) {
+                                    $this.sellerid = data[0].SellerId;
+
+                                },
+                                error: function(xhr) {
+                                    console.log(xhr);
+                                }
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        window.location.href = "http://mouse.molesoft.cn/SearchExperts/Hint.aspx";
+                    },
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

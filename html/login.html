@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+    <form name="form1" method="post" action="AdminLogon.aspx?tdsourcetag=s_pcqq_aiomsg" id="form1">
+        <div>
+            <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+            <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+            <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPaA8FDzhkNjNiMzA1Yjg5NGI0NWRS1Y6j78k9k3tSCjoIp0IS/y/p57xFcOyKeDAoZ3Pwbg==">
+        </div>
+
+        <div>
+            <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="84A8AB9D">
+            <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAARQxwTcPovDWiVyWLB1Q3oqVK7BrRAtEiqu9nGFEI+jB3Y2+Mc6SrnAqio3oCKbxYZfOhf0QjaLHJXsDnEibCrJ5kQNIS4cFtRxDEc/pHIIWySIClBlXq/SKOSoBtI2X5A=">
+        </div>
+        <div id="loginBox">
+            <p>
+                <label for="idname">管理帐号</label>
+                <input name="txtUsername" type="text" id="txtUsername">
+            </p>
+            <p>
+                <label for="password">管理口令</label>
+                <input name="txtPassword" type="password" id="txtPassword">
+            </p>
+            <div>
+                <p>注意：输入管理员帐号和口令后登录</p>
+                <a id="cmdsubmit" class="loginBtn" href="">管理登入</a>
+            </div>
+        </div>
+    </form>
+</body>
+
+<script src="../js/jquery-3.0.0.min.js"></script>
+<script>
+    $(function() {
+        $("#cmdsubmit").click((e) => {
+            e.preventDefault()
+                //发ajax请求，提交用户名和密码
+                // $.post(
+                //     "data/users/login.php",
+                //     //规定连同请求发送到服务器的数据
+                //     {
+                //         uname: $("#txtName").val(),
+                //         upwd: $("#txtPwd").val()
+                //     }
+                // ).then(data => {
+                //     if (data.ok == 1) {
+                //         alert("登录成功");
+                //         location = document.referrer
+                //             //跳回原页面，referrer 属性可返回载入当前文档的文档的 URL
+                //     } else
+                //         alert("登录失败！" + data.msg);
+                // });
+            window.open('./shopName.html', '_self')
+        });
+    })
+</script>
+
+
+
+</html>

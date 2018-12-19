@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>聚财鼠</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/styl.css">
+    <link rel="stylesheet" href="../css/plan.css">
+    <script src='../js/api.js'></script>
+    <script src="../js/jquery-3.0.0.min.js"></script>
+    <script src='../js/vue.min.js'></script>
+    <script src='../module/operationAI.js'></script>
+    <script src='../module/hotcake-plan.js'></script>
+    <script src='../js/echarts.min.js'></script>
+    <script src='../module/customer.js'></script>
+	<script src="./laydate/laydate.js"></script>
+</head>
+<style>
+        #yunyingkanban tr td {
+            position: relative;
+        }
+
+        #yunyingkanban img {
+            position: absolute;
+            right: 15px;
+            width: 11px;
+            top: 16px;
+        }
+
+        #yunyingkanban .wenhao {
+            width: 15px
+        }
+
+        .showInfo {
+            width: 100%;
+            min-height: 40px;
+            line-height: 40px;
+            padding-left: 20px;
+        }
+
+        #hexinyujing {
+            border: 1px solid #d6d6d6
+        }
+
+        #hexinyujing span {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            padding-left: 0px;
+        }
+
+        #hexinyujing span.red {
+            background-image: url(../img/redBomb.png);
+        }
+
+        #hexinyujing span.black {
+            background-image: url(../img/blackBomb.png);
+        }
+
+        #hexinyujing span.orange {
+            background-image: url(../img/orangeBomb.png)
+        }
+
+        #hexinyujing span.gray {
+            background-image: url(../img/fackBomb.png)
+        }
+
+        #hexinyujing tr td {
+            border: 0;
+            text-align: left;
+        }
+
+        #hexinyujing tr td:nth-child(1) {
+            padding-left: 8px;
+            box-sizing: border-box;
+        }
+
+        #hexinyujing tr:first-of-type {
+            background-color: #fff;
+        }
+
+        button {
+            padding: 5px 15px;
+            border-radius: 5px;
+            margin-left: 15px
+        }
+
+        button.red {
+            background-color: #f7ebf7;
+            color: #fff
+        }
+
+        a.black {
+            float: right;
+            margin-right: 10px;
+            padding: 5px 15px;
+            border-radius: 5px;
+            background-color: #000;
+            color: #fff
+        }
+
+        button.gray {
+            background-color: #cecece;
+            color: #585a52;
+        }
+		.layui-laydate-main{
+			width:100%;
+		}
+		
+		.layui-laydate-content tr{
+			    height: 48px !important;
+		}
+		
+		</style>
+<body style="position:relative;">
+    <div id="hotPlan">
+        <v-custom-top :top="topCurrent"></v-custom-top>
+    </div>
+
+    <div class="navigation"><a href="#">店铺预警</a></div>
+    <div class="main-box">
+        <!-- 左侧菜单 -->
+        <div id="leftMenu_Box">
+            <v-left-menu :current="current"></v-left-menu>
+        </div>
+        <div class="r12-10r">
+            <!-- 首个产品描述 -->
+            <div id="hot_product">
+                <v-product-first :sellerid="sellerid"></v-product-first>
+            </div>
+            <!-- 螺旋曲线增长通道 -->
+            <div id="curve_grow_line">
+                <div class="b1">
+                    <h2 class="hot_module_title">螺旋曲线增长通道</h2>
+                </div>
+                <v-curve-grow :sellerid="sellerid"></v-curve-grow>
+            </div>
+
+            <!-- 30天单品重点爆点提醒 -->
+            <div id='important_point'>
+                <div class="b1">
+                    <h2 class="hot_module_title">30天单品重点爆点提醒</h2>
+                </div>
+                <v-important-point :sellerid="sellerid"></v-important-point>
+            </div>
+
+            <!-- 单品核心运营指标预警与解决 -->
+            <div id='main-warning'>
+                <div class="b1">
+                    <h2 class="hot_module_title">单品核心运营指标预警与解决</h2>
+                </div>
+                   <v-main-warning-table-v2></v-main-warning-table-v2>
+				<!-- <table id="hexinyujing"> -->
+					 <!-- <thead> -->
+                        <!-- <tr style="height: 0;border: 0"> -->
+                            <!-- <td style='width: 28%'></td> -->
+                            <!-- <td style='width: 22%'></td> -->
+                            <!-- <td style='width: 16%'></td> -->
+                            <!-- <td style='width: 16%'></td> -->
+                            <!-- <td style='width: 18%'></td> -->
+                        <!-- </tr> -->
+
+                    <!-- </thead> -->
+                    <!-- <tbody> -->
+                        <!-- <tr> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td><a href="javascript:;" class="black" >去解决</a></td> -->
+                        <!-- </tr> -->
+                        <!-- <tr> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td><a href="javascript:;" class="black" >去解决</a></td> -->
+                        <!-- </tr> -->
+                        <!-- <tr> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td><a href="javascript:;" class="black" >去解决</a></td> -->
+                        <!-- </tr> -->
+                        <!-- <tr> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td><a href="javascript:;" class="black" >去解决</a></td> -->
+                        <!-- </tr> -->
+                        <!-- <tr> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td><a href="javascript:;" class="black" >去解决</a></td> -->
+                        <!-- </tr> -->
+                        <!-- <tr> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td><a href="javascript:;" class="black" >去解决</a></td> -->
+                        <!-- </tr> -->
+                        <!-- <tr> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td><a href="javascript:;" class="black" >去解决</a></td> -->
+                        <!-- </tr> -->
+                        <!-- <tr> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td><a href="javascript:;" class="black" >去解决</a></td> -->
+                        <!-- </tr> -->
+                        <!-- <tr> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td><a href="javascript:;" class="black" >去解决</a></td> -->
+                        <!-- </tr> -->
+                        <!-- <tr> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td><a href="javascript:;" class="black" >去解决</a></td> -->
+                        <!-- </tr> -->
+
+                    <!-- </tbody> -->
+				<!-- </table> -->
+				<!-- <img class="noData_img imgShow" style="display:none;" src="../img/loading.png"  /> -->
+                <!-- <img class="noData_img" src="../img/great.png" v-show="noData" /> -->
+              <div id='single-marketing'>
+                <div class='b1'>
+                    <h2 class="hot_module_title">单品营销角色推荐榜</h2>
+                </div>
+                <v-single-marketing :sellerid="sellerid"></v-single-marketing>
+            </div>
+            </div>
+			 <div id="adjustTwo">
+                <v-adjust-form-two></v-adjust-form-two>
+             </div> 
+            <!-- 调整日志 -->
+              <!-- <div id='adjust-info'> -->
+                <!-- <div class='b1'> -->
+                    <!-- <h2 class="hot_module_title">调整日志</h2> -->
+                <!-- </div> -->
+                <!-- <v-adjust-info-v2 :table-data='tableData'></v-adjust-info-v2> -->
+                <!-- <v-page-v2 :count='count' :allpage='allpage' :pageno="pageno" @pn="changepn"></v-page-v2> -->
+            <!-- </div>  -->
+
+            <!-- 单品营销角色推荐榜 -->
+            
+			 
+        </div>
+		
+    </div>
+   
+    <script src="../js/hotcake-plan.page.js"></script>
+    <script>
+			//单品营销角色推荐榜
+			var single = new Vue({
+				el: "#single-marketing",
+				data: {
+							sellerid: sellerid
+						},
+			})
+			 var operaAIT = new Vue({
+            el: "#adjustTwo",
+           
+        })
+            window.onload = function () {
+                //日期渲染
+                /* active('#calendar_content .daysRed .true',[1,2,23,25]) */
+				var shopname = sessionStorage.getItem('shopname');
+				var enddate = sessionStorage.getItem('enddate');
+				dat(shopname,enddate)	
+				function dat(shopname,enddate) {
+							$(".user-a").html('');
+							var datStr =
+								'<span>' + shopname + '</span>' +
+								'<div class="help-box">' +
+								'<div class="help-date" data-start="2013-04-24">' +
+								'<div><span>' + enddate + '</span> 到期 </div><a href="https://fuwu.taobao.com/ser/detail.html?service_code=ts-18350" target="_blank">续费升级</a></div>' +
+								'<div class="help-num">021-65400080</div>' +
+								'<div class="help-more">' +
+								'<a class="help-contact" target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&amp;touid=%E4%B8%8A%E6%B5%B7%E6%99%8F%E9%BC%A0%3A%E8%8A%92%E6%9E%9C&amp;siteid=cntaobao&amp;status=1&amp;charset=utf-8">技术支持</a>' +
+								'<a class="help-explain" href="Help.aspx">使用说明</a>' +
+								'</div>' +
+								'</div>';
+							$(".user-a").html(datStr);
+						}
+				//渲染核心预警
+                        <!-- $.ajax({ -->
+                            <!-- url: "http://localhost:30005/searchmouse-admin/spmag/callSp", //路径   -->
+                            <!-- data: { -->
+                                <!-- name: "SP_Auction_Mine", -->
+                                <!-- params: sellerid + ',' + auctionid -->
+                            <!-- }, -->
+                            <!-- success: function (result) { -->
+                                <!-- //value为每一行数据 index为0 - 9 -->
+                                <!-- console.log(result) -->
+								<!-- if(result.data == null || result.data.length == 0){ -->
+									<!-- $('#hexinyujing').css('display','none') -->
+									<!-- $('.imgShow').css('display','block') -->
+								<!-- };								 -->
+                                <!-- result.data.forEach(function (value, index) { -->
+                                    <!-- $('#hexinyujing tbody tr').eq(index).find( -->
+                                        <!-- 'td').eq(1).append('核心指标: ' + -->
+                                            <!-- value.point); -->
+                                    <!-- $('#hexinyujing tbody tr').eq(index).find( -->
+                                        <!-- 'td').eq(2).append('昨日值: ' + -->
+                                            <!-- value.yesterday_value); -->
+                                    <!-- $('#hexinyujing tbody tr').eq(index).find( -->
+                                        <!-- 'td').eq(3).append('前日值: ' + -->
+                                            <!-- value.day_before_yesterday_value -->
+                                        <!-- ); -->
+
+
+                                    <!-- for (var i = 0; i < 10; i++) { -->
+                                        <!-- $('#hexinyujing tbody tr').eq(index) -->
+                                            <!-- .find('td').eq(0).append( -->
+                                                <!-- '<span></span>'); -->
+
+                                    <!-- } -->
+                                    <!-- var num = value.count;; -->
+
+                                    <!-- for (var i = 0; i < 10; i++) { -->
+                                        <!-- if (value.color == '4') { -->
+                                            <!-- $('#hexinyujing tbody tr').eq( -->
+                                                <!-- index).find('td').eq(0) -->
+                                                <!-- .find('span:lt(' + num + -->
+                                                    <!-- ')').addClass('black'); -->
+                                            <!-- $('#hexinyujing tbody tr').eq( -->
+                                                <!-- index).find('td').eq(0) -->
+                                                <!-- .find('span').eq(num).addClass( -->
+                                                    <!-- 'red'); -->
+                                            <!-- $('#hexinyujing tbody tr').eq( -->
+                                                <!-- index).find('td').eq(0) -->
+                                                <!-- .find('span:gt(' + num + -->
+                                                    <!-- ')').addClass('red'); -->
+                                        <!-- } else if (value.color == '3') { -->
+                                            <!-- $('#hexinyujing tbody tr').eq( -->
+                                                <!-- index).find('td').eq(0) -->
+                                                <!-- .find('span:lt(' + num + -->
+                                                    <!-- ')').addClass('red'); -->
+                                            <!-- $('#hexinyujing tbody tr').eq( -->
+                                                <!-- index).find('td').eq(0) -->
+                                                <!-- .find('span').eq(num).addClass( -->
+                                                    <!-- 'orange'); -->
+                                            <!-- $('#hexinyujing tbody tr').eq( -->
+                                                <!-- index).find('td').eq(0) -->
+                                                <!-- .find('span:gt(' + num + -->
+                                                    <!-- ')').addClass('orange'); -->
+                                        <!-- } else if (value.color == '2') { -->
+                                            <!-- $('#hexinyujing tbody tr').eq( -->
+                                                <!-- index).find('td').eq(0) -->
+                                                <!-- .find('span:lt(' + num + -->
+                                                    <!-- ')').addClass('orange'); -->
+                                            <!-- $('#hexinyujing tbody tr').eq( -->
+                                                <!-- index).find('td').eq(0) -->
+                                                <!-- .find('span').eq(num).addClass( -->
+                                                    <!-- 'gray'); -->
+                                            <!-- $('#hexinyujing tbody tr').eq( -->
+                                                <!-- index).find('td').eq(0) -->
+                                                <!-- .find('span:gt(' + num + -->
+                                                    <!-- ')').addClass('gray'); -->
+                                        <!-- } else if (value.color == '1') { -->
+                                            <!-- $('#hexinyujing tbody tr').eq( -->
+                                                <!-- index).find('td').eq(0) -->
+                                                <!-- .find('span').addClass( -->
+                                                    <!-- 'gray'); -->
+                                        <!-- } -->
+                                    <!-- } -->
+
+
+                                <!-- }) -->
+                            <!-- } -->
+                        <!-- }); -->
+					
+		
+	
+            }
+			
+        </script>
+</body>
+
+</html>

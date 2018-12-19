@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>聚财鼠</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/styl.css">
+  <link rel="stylesheet" href="../css/plan.css">
+  <link rel="stylesheet" href="../css/echarts.css">
+  <link rel="stylesheet" href="../css/layui.css">
+  <script src='../js/api.js'></script>
+  <script src="../js/jquery-3.0.0.min.js"></script>
+  <script src='../js/vue.min.js'></script>
+  <script src="../js/echarts.common.min.js"></script>
+  <script src='../module/customer.js'></script>
+  <script src="./laydate/laydate.js"></script>
+
+</head>
+<style>
+  table:not([id="laydate_table"]) tr {
+    height: 35px;
+  }
+
+  .addColor {
+    background: #04172c !important;
+  }
+
+  .addColor2 {
+    color: red !important;
+    border: 2px solid !important;
+  }
+  .addColor3 {
+    background: #103057 !important; 
+    color: #fff !important;
+  }
+  .addColor4 {
+    background: #fff !important; 
+    color: #333 !important;
+  }
+  .layui-form input[type=checkbox]{
+    display: initial;
+  }
+  .layui-form label{
+    display: inline-block;
+    width: 115px;
+    margin-bottom: 10px;
+  }
+</style>
+
+<body style="position:relative;">
+  <div id="hotPlan">
+    <v-custom-top :top="topCurrent"></v-custom-top>
+  </div>
+
+  <div class="navigation"><a href="#">店铺分析</a></div>
+  <div class="main-box">
+    <!-- 左侧菜单 -->
+    <div id="leftMenu_Box">
+      <v-left-menu-two :current="current"></v-left-menu-two>
+    </div>
+    <div class="r12-10r">
+      <!--搜索趋势 搜索占比-->
+      
+      <div id="shop_analyze" style="overflow: hidden;">
+        <v-optimize-echart :sellerid="sellerid"></v-optimize-echart>
+        
+      </div>
+      <!-- 关键词分析 -->
+      <div id="shop_top_ten">
+        <v-antistop-analyze :sellerid="sellerid"></v-antistop-analyze>
+        
+        <div class="ten_col">
+          <!-- <select name="" id="select_auction" style="position: absolute;left: 0;" onchange="show_sub(this.options[this.options.selectedIndex].value)"> -->
+            
+          </select>
+          
+          
+        </div>
+
+       
+      </div>
+    </div>
+    
+    
+    <script src="../layui.all.js"></script>
+    <script src="../js/jquery.table2excel.js"></script>
+	<script src="../module/seek_optimize.js"></script>
+	<script src="../js/seek_optimize.page.js"></script>
+	
+    </script> 
+    <!-- //第一步：编写模版。你可以使用一个script标签存放模板，如： -->
+    <!-- <script id="demo" type="text/html"> -->
+      <!-- <img class="del" src="../img/删除筛选项 (1).png" alt=""> -->
+      <!-- <div class="confirm" lay-submit lay-filter="form">确定</div> -->
+    <!-- <div class="layui-form-item " pane=""> -->
+      <!-- <div class="checkbox1"  style=" width: 350px;  padding:40px 10px; border: 1px solid #ccc;box-shadow: 0 2px 5px 0 rgb(0,0,0);"> -->
+          <!-- {{#  layui.each(d.list, function(index, item){ }} -->
+          <!-- <label><input name="{{item.name}}" type="checkbox" value="{{item.title}}" />{{item.title}}</label> -->
+          <!-- {{#  })}}     -->
+      <!-- </div> -->
+    <!-- </div> -->
+  <!-- </script> -->
+
+
+
+
+    <script>
+
+      $(function () {
+      
+        //改变颜色
+        <!-- var color = ['#ff0000','#FF0033','#FF0066','#FF0099','#FF9900','#FF9933','#FFCC99','#FFCC66','#FFFF00','#FFFF33']; -->
+		<!-- var color1 = ['#339900','#00CC00','#33CC33','#33CC99','#33CCCC','#33FF00','#33FF33','#33FF66','#33FF99','#33FFCC']; -->
+        <!-- var list = $('#shop_analyze .optimize p span'); -->
+        <!-- for (let i = 0; i < list.length; i++) { -->
+         <!-- $(list[i]).css('color',color1[i]) -->
+         
+        <!-- } -->
+        //监听CheckBox选中的个数
+        $('.layui-form-item .checkbox1 input').click(function () {
+          var num1 = 0;
+          var value = $('#select').val();
+          $('.layui-form-item .checkbox1 input').eq(0).prop('checked', true);
+            $(".layui-form-item .checkbox1 input").each(function () {
+              if (this.checked == true) {
+                num1 = num1 + 1;
+              }
+
+            });
+        
+          if (num1 == 5) {
+            $(".layui-form-item .checkbox1 input").each(function () {
+              if (this.checked == false) {
+                $(this).attr("disabled", true)
+                $(this).parent().css('color', '#ccc')
+              }
+
+            });
+          }
+        })
+        $('#shop_analyze .but button.com').click(function () {
+          //获取点击的元素给其添加样式，讲其兄弟元素的样式移除
+          $('#test1').addClass('active');
+          $(this).addClass("addColor").siblings().removeClass("addColor");
+          //获取选中元素的下标
+
+        });
+        $('#shop_top_ten .ten_col .seek span').click(function () {
+          //获取点击的元素给其添加样式，讲其兄弟元素的样式移除
+          $(this).addClass("addColor3").siblings().removeClass("addColor3");
+          $(this).removeClass("addColor4").siblings().addClass("addColor4");
+          //获取选中元素的下标
+          var val = $(this).attr('value')
+          
+        });
+        $('#shop_analyze .but2 a').click(function () {
+          //获取点击的元素给其添加样式，讲其兄弟元素的样式移除
+
+          $(this).addClass("addColor2").siblings().removeClass("addColor2");
+          //获取选中元素的下标
+
+        });
+        $(".ten_col .export").click(function () {
+          $(".layui-table-box").table2excel({
+
+            // 导出的Excel文档的名称
+            name: "分析",
+            // Excel文件的名称
+            filename: "分析",
+            //文件后缀名
+            fileext: ".xlsx",
+            //是否排除导出图片
+            exclude_img: false,
+            //是否排除导出超链接
+            exclude_links: false,
+            //是否排除导出输入框中的内容
+            exclude_inputs: false
+          });
+        });
+
+      })
+
+
+    </script>
+
+</body>
+
+</html>

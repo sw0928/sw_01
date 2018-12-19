@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>地理分析</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/styl.css">
+    <link rel="stylesheet" href="../css/plan.css">
+    <script src="../js/api.js"></script>
+    <script src="../js/jquery-3.0.0.min.js"></script>
+    <script src="../js/echarts.min.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <script src='../module/customer.js'></script>
+    <script src="../module/client-location.js"></script>
+    <script src="laydate1/laydate.js"></script>
+    <script src="../module/geogra-analyze.js"></script>
+    <script src="../js/china.js"></script>
+    <script src="../module/operationAI.js"></script>
+</head>
+
+<body>
+    <div id="geogreCont">
+
+        <!-- 头部组件 -->
+        <v-custom-top :top="topCurrent"></v-custom-top>
+
+        <div class="navigation"><a href="#">地理分析</a></div>
+
+        <div class="main-box">
+
+            <!-- 左侧菜单 -->
+            <v-left-menu-customer :current="current"></v-left-menu-customer>
+
+            <!-- 头部日期 / 平台选择模块 -->
+            <v-client-nav></v-client-nav>
+
+            <!-- 核心内容模块 -->
+            <div class="r12-10r">
+
+                <!-- 全国流量成交分布组件 -->
+                <v-china-map></v-china-map>
+
+                <!-- 地域列表 -->
+                <v-treasure-buy :trea-tab-data="treaTabData"></v-treasure-buy>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="../js/geogra-analyze.page.js"></script>
+</body>
+
+</html>

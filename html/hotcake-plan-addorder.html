@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>聚财鼠</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/plan.css">
+    <link rel="stylesheet" href="../css/styl.css">
+    <script src='../js/api.js'></script>
+    <script src="../js/jquery-3.0.0.min.js"></script>
+    <script src='../js/vue.min.js'></script>
+    <script src='../module/operationAI.js'></script>
+    <script src='../module/addorder.js'></script>
+    <script src='../module/customer.js'></script>
+</head>
+
+<body style="position:relative;">
+    <div id="hotAddor">
+        <v-custom-top :top="topCurrent"></v-custom-top>
+    </div>
+    <!-- <div class="top">
+        <div class="box">
+            <div class="top-a-box top-a-box-sel">
+                <a class="top-a" href="#">店铺预警</a>
+            </div>
+            <div class="top-a-box">
+                <a class="top-a" href="flow-layout.html">流量把控</a>
+            </div>
+            <div class="top-a-box">
+                <a class="top-a" href="single_price.html">选品定价</a>
+            </div>
+            <div class="top-a-box">
+                <a class="top-a" href="client-location.html">客群定位</a>
+            </div>
+            <div class="top-a-box">
+                <a class="top-a" href="search-perform.html">搜索绩效</a>
+            </div>
+            <div class="user-a">
+            </div>
+        </div>
+    </div> -->
+    <div class="navigation"><a href="#">店铺预警</a></div>
+    <div class="main-box">
+        <!-- 左侧菜单 -->
+        <div id="leftMenu_Box">
+            <v-left-menu></v-left-menu>
+        </div>
+        <div class="r12-10r" id='addOrder'>
+            <v-add-order></v-add-order>
+        </div>
+    </div>
+    <script src="../js/hotcake-plan.page.js"></script>
+    <script>
+        var hotAddor = new Vue({
+            el: "#hotAddor",
+            data: {
+                topCurrent: 0
+            }
+        })
+        var vm = new Vue({
+            el: "#addOrder"
+        })
+    </script>
+</body>
+
+</html>

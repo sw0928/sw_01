@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>聚财鼠</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/styl.css">
+    <link rel="stylesheet" href="../css/plan.css">
+    <script src='../js/api.js'></script>
+    <script src="../js/jquery-3.0.0.min.js"></script>
+    <script src='../js/vue.min.js'></script>
+    <script src='../module/operationAI.js'></script>
+    <script src='../module/activity-plan.js'></script>
+    <script src='../module/pro-manage.js'></script>
+    <script src='../module/customer.js'></script>
+</head>
+
+<body>
+    <div id="activityTop">
+        <v-custom-top :top="topCurrent"></v-custom-top>
+    </div>
+
+    <div class='main-box' style='margin-top:90px;'>
+        <!-- 左侧菜单 -->
+        <div id="leftMenu_Box">
+            <v-left-menu></v-left-menu>
+        </div>
+        <div class="r12-10r">
+            <div id="activity_plan">
+                <v-activity-plan></v-activity-plan>
+            </div>
+        </div>
+    </div>
+    <script>
+        var bus = new Vue();
+
+        var acTop = new Vue({
+            el: "#activityTop",
+            data: {
+                topCurrent: 0
+            }
+        })
+
+        //左侧菜单组件实例化
+        var leftMenu = new Vue({
+            el: "#leftMenu_Box",
+        });
+
+        //组件实例化
+        var leftMenu = new Vue({
+            el: "#activity_plan",
+        });
+    </script>
+    <script src="laydate/laydate.js"></script>
+</body>
+
+</html>

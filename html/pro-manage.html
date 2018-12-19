@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>聚财鼠</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/styl.css">
+    <link rel="stylesheet" href="../css/plan.css">
+    <script src='../js/api.js'></script>
+    <script src="../js/jquery-3.0.0.min.js"></script>
+    <script src='../js/vue.min.js'></script>
+    <script src="../js/jquery.cookie.js"></script>
+    <script src='../module/operationAI.js'></script>
+    <script src='../module/pro-manage.js'></script>
+    <script src='../js/echarts.min.js'></script>
+    <script src='../module/customer.js'></script>
+    <script src="../js/jquery.raty.js"></script>
+	<script src="./laydate/laydate.js"></script>
+</head>
+	<style>
+	
+		.layui-laydate-main{
+			width:100%;
+		}
+		
+		.layui-laydate-content tr{
+			height: 48px !important;
+		}
+		
+	</style>
+<body>
+    <div id="proMang">
+        <v-custom-top :top="topCurrent"></v-custom-top>
+    </div>
+    <div class='main-box' style='margin-top:90px;'>
+
+        <!-- 左侧菜单 -->
+        <div id="leftMenu_Box">
+            <v-left-menu :current = "current"></v-left-menu>
+        </div>
+        <div class="r12-10r">
+            <div id="content_wrap" class="b1">
+
+                <!-- 促销星级 -->
+                <v-pro-star :sellerid="sellerid"></v-pro-star>
+
+                <!-- 30天店铺促销节点提醒 -->
+                <v-after-node-remind :sellerid="sellerid"></v-after-node-remind>
+
+                <!-- 下30天促销活动时间节点提醒 -->
+                <v-node-remind :sellerid="sellerid"></v-node-remind>
+
+                <!-- 促销单品推荐 -->
+                <v-single-product :sellerid="sellerid"></v-single-product>
+
+                <!-- 近期活动 -->
+                <!--  <v-recent-active :sellerid="sellerid"></v-recent-active> -->
+
+                <!-- 报名活动 -->
+                <!-- <v-apply-active></v-apply-active> -->
+            </div>
+        </div>
+    </div>
+    <script>
+        //头部
+		var sellerid = sessionStorage.getItem('sellerId');
+        var operaAI = new Vue({
+            el: "#proMang",
+            data: {
+                topCurrent: 1
+            }
+        })
+        //左侧菜单组件实例化
+        var leftMenu = new Vue({
+            el: "#leftMenu_Box",
+            data:{
+                current:2
+            }
+        });
+        var content = new Vue({
+            el: "#content_wrap",
+            data: {
+                sellerid: sellerid
+            },
+
+        });
+		$(function(){
+			//促销星级评价
+        $('.star').raty({
+            number: 10 ,
+            readOnly: true,
+            width:350,
+            score: function () {
+                return $(this).attr('datascore');
+            }
+        });
+        $('.star1').raty({
+            number: 10 ,
+            readOnly: true,
+            width:350,
+            score: function () {
+                return $(this).attr('weekSatrCount');
+            }
+        });
+        //日历操作
+        $('.starTwo').raty({
+            number: 10 ,
+            readOnly: true,
+            width:350,
+            score: function () {
+                return $(this).attr('datascore');
+            }
+        });
+		var data = $('#calendar .calendar_remind li .data span').text();
+         //active('#calendar_content .daysRed .true',[1,2,23,25])
+         //active('#calendar_content .daysYellow .true',[1,5,21,25]) 
+		 
+		 var shopname = sessionStorage.getItem('shopname');
+		var enddate = sessionStorage.getItem('enddate');
+				dat(shopname,enddate)	
+				function dat(shopname,enddate) {
+							$(".user-a").html('');
+							var datStr =
+								'<span>' + shopname + '</span>' +
+								'<div class="help-box">' +
+								'<div class="help-date" data-start="2013-04-24">' +
+								'<div><span>' + enddate + '</span> 到期 </div><a href="https://fuwu.taobao.com/ser/detail.html?service_code=ts-18350" target="_blank">续费升级</a></div>' +
+								'<div class="help-num">021-65400080</div>' +
+								'<div class="help-more">' +
+								'<a class="help-contact" target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&amp;touid=%E4%B8%8A%E6%B5%B7%E6%99%8F%E9%BC%A0%3A%E8%8A%92%E6%9E%9C&amp;siteid=cntaobao&amp;status=1&amp;charset=utf-8">技术支持</a>' +
+								'<a class="help-explain" href="Help.aspx">使用说明</a>' +
+								'</div>' +
+								'</div>';
+							$(".user-a").html(datStr);
+						}
+		})
+        
+    </script>
+    <!-- <script>
+        var bus = new Vue();
+
+        var proMang = new Vue({
+            el: "#proMang",
+            data: {
+                topCurrent: 0
+            }
+        })
+
+        //左侧菜单组件实例化
+        var leftMenu = new Vue({
+            el: "#leftMenu_Box",
+        });
+
+        var content = new Vue({
+            el: "#content_wrap",
+            data: {
+                sellerid: ''
+            },
+            created() {
+                // 给父级绑定id
+                var $this = this;
+
+                // setTimeout(() => {
+                //     $this.sellerid = 195051840; // 友来福
+                //     // $this.sellerid = 601879343;
+                // }, 1000);
+                $.ajax({
+                    url: "http://mouse.molesoft.cn/api.aspx?invokeName=GetShopInfomation",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(data) {
+                        if (data == false) {
+                            window.location.href = "http://mouse.molesoft.cn/SearchExperts/Hint.aspx";
+                        } else {
+                            var $str = data.shopname;
+                            //添加用户数据
+                            function dat() {
+                                $(".user-a").html('');
+                                var datStr =
+                                    '<span>' + data.shopname + '</span>' +
+                                    '<div class="help-box">' +
+                                    '<div class="help-date" data-start="2013-04-24">' +
+                                    '<div><span>' + data.enddate + '</span> 到期 </div><a href="https://fuwu.taobao.com/ser/detail.html?service_code=ts-18350" target="_blank">续费升级</a></div>' +
+                                    '<div class="help-num">021-65400080</div>' +
+                                    '<div class="help-more">' +
+                                    '<a class="help-contact" target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&amp;touid=%E4%B8%8A%E6%B5%B7%E6%99%8F%E9%BC%A0%3A%E8%8A%92%E6%9E%9C&amp;siteid=cntaobao&amp;status=1&amp;charset=utf-8">技术支持</a>' +
+                                    '<a class="help-explain" href="Help.aspx">使用说明</a>' +
+                                    '</div>' +
+                                    '</div>';
+                                $(".user-a").html(datStr);
+                            }
+                            dat();
+
+                            //获取店铺ID
+                            $.ajax({
+                                url: $api.querySeller + data.shopname,
+                                type: "GET",
+                                dataType: "json",
+                                success: function(data) {
+                                    $this.sellerid = data[0].SellerId;
+                                },
+                                error: function(xhr) {
+                                    console.log(xhr);
+                                }
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        window.location.href = "http://mouse.molesoft.cn/SearchExperts/Hint.aspx";
+                    },
+                });
+            }
+        });
+    </script> -->
+</body>
+
+</html>

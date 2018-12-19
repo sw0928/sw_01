@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>聚财鼠</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/styl.css">
+  <link rel="stylesheet" href="../css/plan.css">
+  <link rel="stylesheet" href="../css/echarts.css">
+  <link rel="stylesheet" href="../css/layui.css">
+  <script src='../js/api.js'></script>
+  <script src="../js/jquery-3.0.0.min.js"></script>
+  <script src='../js/vue.min.js'></script>
+  <script src="../js/echarts.common.min.js"></script>
+  <script src='../module/customer.js'></script>
+  <script src="./laydate/laydate.js"></script>
+
+</head>
+<style>
+  table:not([id="laydate_table"]) tr {
+    height: 35px;
+  }
+
+  .addColor {
+    background: #04172c !important;
+  }
+
+  .addColor2 {
+    color: red !important;
+    border: 2px solid !important;
+  }
+  table tr td{
+    height: 50px;
+    cursor: default;
+  }
+  .layui-form input[type=checkbox]{
+    display: initial;
+  }
+  .layui-form label{
+    display: inline-block;
+    width: 100px;
+    margin-bottom: 10px;
+  }
+</style>
+
+<body style="position:relative;">
+  <div id="hotPlan">
+    <v-custom-top :top="topCurrent"></v-custom-top>
+  </div>
+
+  <div class="navigation"><a href="#">店铺分析</a></div>
+  <div class="main-box">
+    <!-- 左侧菜单 -->
+    <div id="leftMenu_Box">
+      <v-left-menu-two :current="current"></v-left-menu-two>
+    </div>
+    <div class="r12-10r">
+      <!--关联宝贝分析-->
+      
+      <div id="shop_analyze" style="overflow: hidden;">
+        <v-relevance-echart :sellerid="sellerid"></v-relevance-echart>
+       
+      </div>
+     <!--  <div id="relevance" style="overflow: hidden;position: relative;">
+        <v-relevance-echart-two :sellerid="sellerid"></v-relevance-echart-two>
+        
+      </div> -->
+      
+    </div>
+    <script src="../module/relevance.js"></script>
+    <script src="../js/relevance.page.js"></script>
+
+
+
+
+
+    <script>
+
+      $(function () {
+      
+        $('#shop_analyze .but button.com').click(function () {
+          //获取点击的元素给其添加样式，讲其兄弟元素的样式移除
+          $('#test1').addClass('active');
+          $(this).addClass("addColor").siblings().removeClass("addColor");
+          //获取选中元素的下标
+
+        });
+        
+        $('#shop_analyze .but2 a').click(function () {
+          //获取点击的元素给其添加样式，讲其兄弟元素的样式移除
+
+          $(this).addClass("addColor2").siblings().removeClass("addColor2");
+          //获取选中元素的下标
+
+        });
+      
+
+      })
+
+
+    </script>
+
+</body>
+
+</html>

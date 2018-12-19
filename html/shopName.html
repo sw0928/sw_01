@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <title>聚财鼠</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/styl.css">
+    <link rel="stylesheet" href="../css/plan.css">
+	<script src="../js/jquery-3.0.0.min.js"></script>
+    <script src='../module/show_name.js'></script>
+</head>
+
+<body>
+    <div style="text-align:center">
+        店铺选择
+    </div>
+		<div id="content" class="selectCont" style="text-align:center;margin-top: 10px">
+		</div>
+    <div style="text-align:center;margin-top: 10px">
+        <button>
+            提交
+        </button>
+    </div>
+</body>
+
+
+<script id="showName" type="text/html">
+		
+		<select name="select" id="select">
+			{{each data}}
+        			<option name="{{$value.shopName}}" value="{{$index}}">{{$value.shopName}}</option>
+        		{{/each}}
+            
+        </select>
+        
+    
+</script>
+<script type="text/javascript">
+ 
+
+    $(function() {
+		$.ajax({
+                url: "http://localhost:30005/searchmouse-admin/shopWarn/queryShopName",
+                type: "GET",
+                dataType: "json",
+                async: false,
+                success: function(data) {
+                    console.log(data);
+					var html = template("showName",data);
+						
+						 $("#content").append(html);
+						 
+                },
+                error: function(xhr) {
+                    console.log(xhr);
+                }
+            }) 
+        $('button').click(function() {
+			
+			var shopname=$("#select").find("option:selected").attr("name");
+			$.ajax({
+                url: "http://localhost:30005/searchmouse-admin/shopWarn/querySeller",
+                type: "GET",
+                data:{
+					shopname:shopname
+				},
+                dataType: "json",
+                async: false,
+                success: function(data) {  
+						  sessionStorage.setItem("sellerId", data.data[0].sellerId);
+						  sessionStorage.setItem("shopname", shopname);
+						   window.open('./operationAI.html', '_self')
+                },
+                error: function(xhr) {
+                    console.log(xhr);
+                }
+            }) 
+
+        })
+
+    })
+</script>
+
+</html>
